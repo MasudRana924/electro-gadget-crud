@@ -1,5 +1,6 @@
 const express = require('express')
 const { MongoClient, CURSOR_FLAGS } = require('mongodb');
+const ObjectId=require('mongodb').ObjectId
 const cors = require('cors');
 require('dotenv').config()
 const app = express()
@@ -17,8 +18,8 @@ async function run() {
         const database = client.db('electroGadget')
         // products connection
         const productsCollection = database.collection('products')
-         // order connection
-         const ordersCollection = database.collection('orders')
+        // order connection
+        const ordersCollection = database.collection('orders')
         // get api for all data 
         app.get('/products', async (req, res) => {
             const cursor = productsCollection.find({})
@@ -33,22 +34,29 @@ async function run() {
                 const products = await cursor.toArray()
             }
             res.send({
-                count,products
+                count, products
             })
         })
-         // post api keys e data pawar jonno
-         app.post('/products/bykeys', async (req, res) => {
+        //    get single data 
+        app.get('/products/:id', async (req, res) => {
+            const id = req.params.id
+            const query = { _id: ObjectId(id) }
+            const product = await productsCollection.findOne(query)
+            res.json(product)
+        })
+        // post api keys e data pawar jonno
+        app.post('/products/bykeys', async (req, res) => {
             console.log(req.body)
             const keys = req.body
             const query = { key: { $in: keys } }
             const products = await productsCollection.find(query).toArray()
             res.json(products)
-           
+
         })
         // orders 
-        app.post('/orders',async(req,res)=>{
-            const order=req.body 
-            const result=await ordersCollection.insertOne(order)
+        app.post('/orders', async (req, res) => {
+            const order = req.body
+            const result = await ordersCollection.insertOne(order)
             res.json(result)
         })
 
