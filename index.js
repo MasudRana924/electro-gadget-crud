@@ -74,6 +74,15 @@ async function run() {
             console.log(id)
             res.send(user)
         })
+        // post 
+        app.post('/products', async (req, res) => {
+            const newProduct = req.body
+            const result = await productsCollection.insertOne(newProduct)
+            console.log('got new user  ', req.body)
+            console.log('added user', result)
+            // res.send('hit the post')
+            res.json(result)
+        })
         // delete 
          //  delete api 
          app.delete('/orders/:id', async (req, res) => {
@@ -82,6 +91,7 @@ async function run() {
             const result = await ordersCollection.deleteOne(query)
             res.json(result)
         })
+
 
     }
     finally {
