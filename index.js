@@ -76,10 +76,12 @@ async function run() {
             const email=req.query.email 
             if(email){
                 query={email:email}
+                const cursor = ordersCollection.find(email)
+                const orders = await cursor.toArray()
+                res.json(orders)
             }
-            const cursor = ordersCollection.find(email)
-            const orders = await cursor.toArray()
-            res.send(orders)
+            
+           
         })
          //  single orders id
          app.get('/orders/:id', async (req, res) => {
