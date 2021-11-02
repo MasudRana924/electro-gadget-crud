@@ -71,7 +71,7 @@ async function run() {
             const orders = await cursor.toArray()
             res.send(orders)
         })
-        app.get('/myorders',async(req,res)=>{
+        app.get('/orders',async(req,res)=>{
             let query={}
             const email=req.query.email 
             if(email){
